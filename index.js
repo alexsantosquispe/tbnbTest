@@ -1,8 +1,8 @@
 import 'react-native-gesture-handler'
 import React from 'react'
 import { AppRegistry } from 'react-native'
-import Root from './src/ui/navigation'
 import { name as appName } from './app.json'
+import Root from './src/ui/navigation'
 
 const RNRoot = () => {
   return <Root />

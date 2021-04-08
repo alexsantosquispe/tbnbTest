@@ -1,26 +1,28 @@
-import React, { useState, useEffect } from "react"
-import { View, Text, StatusBar } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
-import { useNavigation } from "@react-navigation/native"
-
-import * as Api from "../../core/api/firebaseAPI"
+import { useNavigation } from '@react-navigation/native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, StatusBar, Alert } from 'react-native'
+import changeNavigationBarColor from 'react-native-navigation-bar-color'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import * as Api from '../../core/api/firebaseAPI'
+import { CATALOG } from '../../core/constants'
 import {
-  HeaderNav,
   BaseList,
+  CustomModal,
   ItemCatalog,
-  InputText,
-  TextArea,
-} from "../components"
-import { CATALOG } from "../../core/constants"
-import { Colors, GlobalStyles } from "../styles"
+  ItemAttached,
+  HeaderNav,
+  Separator
+} from '../components'
+import { Colors, GlobalStyles } from '../styles'
+
+changeNavigationBarColor(Colors.ligth, true)
 
 const NewProduct = () => {
   const navigation = useNavigation()
   const [catalog, setCatalog] = useState([])
-  const [nameProduct, setNameProduct] = useState("")
-  const [quantity, setQuantity] = useState("1")
-  const [price, setPrice] = useState("0.0")
-  const [description, setDescription] = useState("")
+  const [tempItems, setTempItems] = useState([])
+  const [itemSelected, setItemSelected] = useState({})
+  const [modalVisibility, setModalVisibility] = useState(false)
 
   useEffect(() => {
     const docs = Api.fetchItems(CATALOG, (result) => {
@@ -30,15 +32,68 @@ const NewProduct = () => {
   }, [])
 
   const goBack = () => {
-    navigation.goBack()
+    confirmationDialog()
+  }
+
+  const toggleModal = () => {
+    setModalVisibility(!modalVisibility)
+  }
+
+  const confirmationDialog = () => {
+    return Alert.alert(
+      'Are you sure?',
+      'All the items modified will be removed',
+      [
+        {
+          text: 'No',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+        },
+        { text: 'Yes', onPress: () => navigation.goBack() }
+      ]
+    )
   }
 
   const keyExtractor = (item) => {
     return item.uid.toString()
   }
 
-  const renderItem = ({ item }) => {
-    return <ItemCatalog data={item} onPressHandler={() => {}} />
+  const renderItemCatalog = ({ item }) => {
+    return (
+      <ItemCatalog
+        data={item}
+        onPressHandler={() => {
+          setTempItems((prev) => {
+            return [
+              ...prev,
+              {
+                ...item,
+                uid: Date.now(),
+                quantity: 1
+              }
+            ]
+          })
+        }}
+      />
+    )
+  }
+
+  const renderItemTemp = ({ item }) => {
+    return (
+      <ItemAttached
+        data={item}
+        onPressHandler={() => {
+          setItemSelected(item)
+          setModalVisibility(true)
+        }}
+        onRemove={() => {
+          const filtered = tempItems.filter(
+            (itemValue) => itemValue.uid !== item.uid
+          )
+          setTempItems(filtered)
+        }}
+      />
+    )
   }
 
   return (
@@ -55,12 +110,11 @@ const NewProduct = () => {
         <View
           style={{
             marginVertical: 12,
-            justifyContent: "center",
-          }}
-        >
-          <View style={{ paddingBottom: 6 }}>
-            <Text style={{ fontWeight: "700" }}>Catalog</Text>
-            <Text style={{ color: Colors.textSubTitle }}>
+            justifyContent: 'center'
+          }}>
+          <View>
+            <Text style={GlobalStyles.labelBlackSmall}>Catalog</Text>
+            <Text style={GlobalStyles.labelSubTitleSmall}>
               Select an item to fill the form automatically
             </Text>
           </View>
@@ -68,50 +122,25 @@ const NewProduct = () => {
             data={catalog}
             horizontal={true}
             keyExtractor={keyExtractor}
-            renderItem={renderItem}
+            renderItem={renderItemCatalog}
           />
-          <View style={{ paddingVertical: 16 }}>
-            <Text style={{ fontWeight: "700" }}>New item form</Text>
-            <InputText
-              value={nameProduct}
-              placeholder="Product name"
-              onChangeTextHandler={(text) => {
-                setNameProduct(text)
-              }}
-            />
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <InputText
-                symbol="#"
-                value={quantity}
-                placeholder="Product name"
-                keyboardType="decimal-pad"
-                width="48%"
-                onChangeTextHandler={(text) => {
-                  setQuantity(text)
-                }}
-              />
-              <InputText
-                symbol="$"
-                value={price}
-                placeholder="Product name"
-                keyboardType="number-pad"
-                width="48%"
-                onChangeTextHandler={(text) => {
-                  setPrice(text)
-                }}
-              />
-            </View>
-            <TextArea
-              value={description}
-              placeholder="Description..."
-              onChangeTextHandler={(text) => {
-                setDescription(text)
-              }}
-            />
+          <Separator customStyles={GlobalStyles.biggerMarginSpace} />
+          <View>
+            <Text style={GlobalStyles.labelBlackSmall}>Items Selected</Text>
           </View>
+          <BaseList
+            data={tempItems}
+            numColumns={2}
+            keyExtractor={keyExtractor}
+            renderItem={renderItemTemp}
+            footerList={() => <View style={GlobalStyles.listFooterEmpty} />}
+          />
         </View>
+        <CustomModal
+          data={itemSelected}
+          isVisible={modalVisibility}
+          onCloseHandler={toggleModal}
+        />
       </View>
     </SafeAreaView>
   )

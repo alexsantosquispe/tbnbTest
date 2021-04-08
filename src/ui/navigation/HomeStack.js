@@ -1,10 +1,10 @@
-import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack'
+import React from 'react'
 import Icons from 'react-native-vector-icons/Ionicons'
 import { Home, History, ProductDetail, NewProduct } from '../pages'
-import { PRODUCTS, HISTORY, PRODUCT_DETAIL, NEW_PRODUCT } from './RouteNames'
 import { Colors } from '../styles'
+import { PRODUCTS, HISTORY, PRODUCT_DETAIL, NEW_PRODUCT } from './RouteNames'
 
 const Stack = createStackNavigator()
 const Tabs = createBottomTabNavigator()

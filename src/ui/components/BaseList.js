@@ -1,17 +1,21 @@
-import React from "react"
-import { FlatList } from "react-native"
+import React from 'react'
+import { FlatList } from 'react-native'
 
 const BaseList = ({
   data,
   keyExtractor,
   renderItem,
   headerList = null,
+  footerList = null,
   renderSeparator = null,
   horizontal = false,
+  numColumns = 1
 }) => {
   return (
     <FlatList
+      style={{ minHeight: 100 }}
       data={data}
+      numColumns={numColumns}
       horizontal={horizontal}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
@@ -19,6 +23,7 @@ const BaseList = ({
       showsHorizontalScrollIndicator={false}
       ItemSeparatorComponent={renderSeparator}
       ListHeaderComponent={headerList}
+      ListFooterComponent={footerList}
     />
   )
 }

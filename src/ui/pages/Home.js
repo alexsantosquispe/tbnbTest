@@ -1,24 +1,27 @@
-import React, { useState, useEffect } from "react"
-import { View, Text, StatusBar } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation } from '@react-navigation/native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, StatusBar } from 'react-native'
+import changeNavigationBarColor from 'react-native-navigation-bar-color'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import * as Api from "../../core/api/firebaseAPI"
+import * as Api from '../../core/api/firebaseAPI'
+import { PRODUCTS } from '../../core/constants'
 import {
   FloatButton,
   ItemProduct,
   SearchBar,
   Separator,
-  BaseList,
-} from "../components"
-import { NEW_PRODUCT } from "../navigation/RouteNames"
-import { PRODUCTS } from "../../core/constants"
-import { GlobalStyles, Colors } from "../styles"
+  BaseList
+} from '../components'
+import { NEW_PRODUCT } from '../navigation/RouteNames'
+import { GlobalStyles, Colors } from '../styles'
+
+changeNavigationBarColor(Colors.ligth, true)
 
 const Home = () => {
   const navigation = useNavigation()
   const [products, setProducts] = useState([])
-  const [searchText, setSearchText] = useState("")
+  const [searchText, setSearchText] = useState('')
 
   useEffect(() => {
     const docs = Api.fetchItems(PRODUCTS, (result) => {
@@ -42,7 +45,7 @@ const Home = () => {
   const headerList = () => {
     return (
       <View style={{ padding: 6 }}>
-        <Text style={{ fontWeight: "700" }}>Products List</Text>
+        <Text style={{ fontWeight: '700' }}>Products List</Text>
       </View>
     )
   }

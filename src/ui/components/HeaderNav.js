@@ -17,7 +17,8 @@ const HeaderNav = ({
           flex: 1,
           flexDirection: 'row',
           backgroundColor: Colors.background,
-          alignItems: 'center'
+          alignItems: 'center',
+          elevation: 3
         }}>
         <TouchableOpacity
           style={{ paddingHorizontal: 12 }}
@@ -35,17 +36,6 @@ const HeaderNav = ({
           </TouchableOpacity>
         ) : null}
       </View>
-      <View
-        style={{
-          height: 1,
-          padding: 0,
-          margin: 0,
-          elevation: 16,
-          shadowColor: Colors.dark,
-          shadowOpacity: 0.5,
-          shadowOffset: { width: 1, height: 10 }
-        }}
-      />
     </View>
   )
 }
