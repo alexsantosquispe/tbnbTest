@@ -1,23 +1,22 @@
-import React from "react"
-import { View, TextInput } from "react-native"
-import { Colors, GlobalStyles } from "../styles"
+import React from 'react'
+import { View, TextInput } from 'react-native'
+import { Colors, GlobalStyles } from '../styles'
 
 const TextArea = ({ value, placeholder, onChangeTextHandler }) => {
   return (
     <View
       style={[
         GlobalStyles.searchBarContainer,
-        { height: 100, paddingHorizontal: 8 },
-      ]}
-    >
+        { height: 100, paddingHorizontal: 8 }
+      ]}>
       <TextInput
         style={[
           GlobalStyles.searchInput,
           {
             paddingTop: 4,
-            textAlignVertical: "top",
-            alignSelf: "flex-start",
-          },
+            textAlignVertical: 'top',
+            alignSelf: 'flex-start'
+          }
         ]}
         selectionColor={Colors.primary}
         multiline={true}

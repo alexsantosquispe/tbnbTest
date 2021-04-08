@@ -1,9 +1,11 @@
 import firestore from '@react-native-firebase/firestore'
 
 export const fetchItems = (collection, callback, orderBy) => {
+  const orderByDefault = orderBy || ['uid', 'asc']
+
   return firestore()
     .collection(collection)
-    .orderBy('uid', 'asc')
+    .orderBy(...orderByDefault)
     .onSnapshot((querySnapshot) => {
       const result = querySnapshot.docs.map((document) => {
         return {
@@ -21,7 +23,8 @@ export const getItemById = (collection, itemId) => {
 
 export const addItem = async (collection, item) => {
   try {
-    const result = await firestore().collection(collection).add(item)
+    // Complete this funtion to add an item
+    await firestore().collection(collection).add(item)
   } catch (error) {
     console.log(error)
   }

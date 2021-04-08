@@ -1,4 +1,4 @@
-import { GlobalStyles } from "./GlobalStyles"
-import { Colors } from "./Colors"
+import { Colors } from './Colors'
+import { GlobalStyles } from './GlobalStyles'
 
 export { GlobalStyles, Colors }

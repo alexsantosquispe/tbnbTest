@@ -1,25 +1,25 @@
-import * as types from "../constants/TypeActions"
+import * as types from '../constants/TypeActions'
 
 export const sendEditItem = (payload) => ({
   type: types.EDIT_ITEM_SEND,
-  payload,
+  payload
 })
 
 export const onChangeEditItem = (payload) => ({
   type: types.EDIT_ITEM_ON_CHANGE,
-  payload,
+  payload
 })
 
 export const loadingEditItem = () => ({
-  type: types.EDIT_ITEM_LOADING,
+  type: types.EDIT_ITEM_LOADING
 })
 
 export const EditItemSuccess = (payload) => ({
   type: types.EDIT_ITEM_SUCCESS,
-  payload,
+  payload
 })
 
 export const EditItemError = (payload) => ({
   type: types.EDIT_ITEM_ERROR,
-  payload,
+  payload
 })
