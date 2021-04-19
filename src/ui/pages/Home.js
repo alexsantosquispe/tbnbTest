@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import * as Api from '../../core/api/firebaseAPI'
 import { PRODUCTS } from '../../core/constants'
+import { useInventoryContext } from '../../core/providers/InventoryProvider'
 import {
   FloatButton,
   ItemProduct,
@@ -19,30 +20,47 @@ import { GlobalStyles, Colors } from '../styles'
 changeNavigationBarColor(Colors.ligth, true)
 
 const Home = () => {
+  const { products, setProducts } = useInventoryContext()
   const navigation = useNavigation()
-  const [products, setProducts] = useState([])
   const [searchText, setSearchText] = useState('')
+  const [loadingProducts, setLoadingProducts] = useState(false)
 
   useEffect(() => {
-    const docs = Api.fetchItems(PRODUCTS, (result) => {
-      setProducts(result)
-    })
-    return () => docs
-  }, [])
+    setLoadingProducts(true)
+    console.log('FETCH PRODUCTS')
+    const docs = Api.fetchItems(
+      PRODUCTS,
+      (result) => {
+        if (result.success) {
+          setProducts(result.data)
+          setLoadingProducts(false)
+        }
+      },
+      ['modifiedAt', 'desc'],
+      true
+    )
+    return () => docs()
+  }, [setProducts, setLoadingProducts])
 
-  const renderItem = ({ item }) => {
-    return <ItemProduct data={item} onPressHandler={() => {}} />
+  const openProducDetail = (productSelected) => {
+    console.log(productSelected)
   }
 
   const keyExtractor = (item) => {
     return item.uid.toString()
   }
 
+  const renderItem = ({ item }) => {
+    return (
+      <ItemProduct data={item} onPressHandler={() => openProducDetail(item)} />
+    )
+  }
+
   const addNewProduct = () => {
     navigation.navigate(NEW_PRODUCT)
   }
 
-  const headerList = () => {
+  const renderHeader = () => {
     return (
       <View style={{ padding: 6 }}>
         <Text style={{ fontWeight: '700' }}>Products List</Text>
@@ -54,25 +72,27 @@ const Home = () => {
     return <Separator />
   }
 
+  const renderFooter = () => <View style={GlobalStyles.listFooterEmpty} />
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={GlobalStyles.fullContainer}>
       <StatusBar backgroundColor={Colors.background} barStyle="dark-content" />
-      <View style={[GlobalStyles.mainContainer]}>
+      <View style={GlobalStyles.mainContainer}>
         <Text style={GlobalStyles.titleText}>Inventory</Text>
         <SearchBar
           value={searchText}
           placeholder="Search item..."
-          onChangeTextHandler={(text) => {
-            setSearchText(text)
-          }}
+          onChangeTextHandler={setSearchText}
           onClearHandler={() => {}}
         />
         <BaseList
           data={products}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
-          headerList={headerList}
+          headerList={renderHeader}
+          footerList={renderFooter}
           renderSeparator={renderSeparator}
+          loading={loadingProducts}
         />
         <FloatButton icon="add" onPressHandler={addNewProduct} />
       </View>

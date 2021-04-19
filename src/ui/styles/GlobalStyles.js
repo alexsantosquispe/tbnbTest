@@ -7,9 +7,18 @@ export const GlobalStyles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: Colors.background
   },
+  fullContainer: {
+    flex: 1
+  },
   centeredContainer: {
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  justifyContentCenter: {
+    justifyContent: 'center'
+  },
+  horizontalEnd: {
+    alignItems: 'flex-end'
   },
   modalForm: {
     backgroundColor: Colors.background,
@@ -19,6 +28,16 @@ export const GlobalStyles = StyleSheet.create({
     marginHorizontal: 36,
     borderRadius: 12
   },
+  emptyLayout: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.background
+  },
+  loadingContainer: {
+    minHeight: 100,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   titleText: {
     color: Colors.textTitle,
     fontSize: 28,
@@ -26,11 +45,33 @@ export const GlobalStyles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 16
   },
+  textSubTitle: {
+    color: Colors.textTitle,
+    fontSize: 22,
+    paddingTop: 8,
+    paddingBottom: 4
+  },
   itemContainer: {
     flexDirection: 'row',
     marginVertical: 10,
     alignItems: 'center',
     borderRadius: 12
+  },
+  itemProductContent: {
+    flex: 1,
+    marginLeft: 16,
+    marginRight: 8,
+    alignSelf: 'center'
+  },
+  itemProductName: {
+    fontSize: 17,
+    fontWeight: '700',
+    paddingBottom: 6
+  },
+  itemProductDate: {
+    fontSize: 14,
+    color: Colors.darkGray,
+    fontStyle: 'italic'
   },
   buttonContainer: {
     backgroundColor: Colors.primary,
@@ -49,11 +90,11 @@ export const GlobalStyles = StyleSheet.create({
   },
   defaultImage: {
     backgroundColor: Colors.primary,
-    width: 70,
-    height: 70,
+    width: 90,
+    height: 90,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 12
+    borderRadius: 20
   },
   itemCatalog: {
     width: 78,
@@ -63,7 +104,7 @@ export const GlobalStyles = StyleSheet.create({
     marginRight: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 12
+    borderRadius: 20
   },
   itemSelected: {
     backgroundColor: Colors.primary
@@ -92,10 +133,13 @@ export const GlobalStyles = StyleSheet.create({
   },
   searchBarContainer: {
     flexDirection: 'row',
-    marginVertical: 4,
     backgroundColor: Colors.inputBackground,
+    marginVertical: 4,
     borderRadius: 8,
-    alignItems: 'center'
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: Colors.inputBackground,
+    paddingLeft: 8
   },
   searchIcon: {
     paddingHorizontal: 6
@@ -126,12 +170,13 @@ export const GlobalStyles = StyleSheet.create({
     height: 1
   },
   listFooterEmpty: {
-    height: 100,
+    height: 80,
     width: '100%'
   },
   itemAttached: {
     alignItems: 'center',
-    borderRadius: 12,
+    width: '48%',
+    borderRadius: 20,
     borderColor: Colors.ligthGray,
     borderWidth: 0.8,
     backgroundColor: Colors.cardBackground,
@@ -146,11 +191,22 @@ export const GlobalStyles = StyleSheet.create({
     color: Colors.darkGray,
     fontSize: 12.5
   },
-  circleBadgeText: {
+  regularBadgeContainer: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8
+  },
+  circleBadgeContainer: {
     position: 'absolute',
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 15
+    // borderRadius: 16,
+    borderBottomRightRadius: 16,
+    borderTopLeftRadius: 8
+  },
+  circleBadgeText: {
+    fontWeight: 'bold',
+    fontSize: 14
   },
   circleBadgeIcon: {
     position: 'absolute',
@@ -164,7 +220,7 @@ export const GlobalStyles = StyleSheet.create({
   counterContainer: {
     flexDirection: 'row',
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: 16,
     borderColor: Colors.ligthGray,
     alignItems: 'center'
   },
@@ -187,13 +243,14 @@ export const GlobalStyles = StyleSheet.create({
     paddingVertical: 8
   },
   labelBlackSmall: {
+    color: Colors.dark,
     paddingTop: 4,
     fontSize: 16,
     fontWeight: '700'
   },
   labelSubTitleSmall: {
     fontSize: 14,
-    color: Colors.textSubTitle
+    color: Colors.gray
   },
   topRight: {
     right: 8,

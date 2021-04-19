@@ -1,12 +1,16 @@
 import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
+
+import { InventoryProvider } from '../../core/providers/InventoryProvider'
 import HomeStack from './HomeStack'
 
 const Root = () => {
   return (
-    <NavigationContainer>
-      <HomeStack />
-    </NavigationContainer>
+    <InventoryProvider>
+      <NavigationContainer>
+        <HomeStack />
+      </NavigationContainer>
+    </InventoryProvider>
   )
 }
 
