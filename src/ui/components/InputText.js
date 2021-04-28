@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, TextInput, Text } from 'react-native'
 import Icons from 'react-native-vector-icons/Ionicons'
 import { Colors, GlobalStyles } from '../styles'
@@ -10,13 +10,19 @@ const InputText = ({
   placeholder,
   keyboardType = 'default',
   onChangeTextHandler,
-  width = '100%'
+  width = '100%',
+  disabled = false
 }) => {
+  const [isFocused, setIsFocused] = useState(false)
+
   return (
     <View
       style={[
         GlobalStyles.searchBarContainer,
-        { width: width, paddingLeft: 8 }
+        {
+          borderColor: isFocused ? Colors.primary : Colors.inputBackground,
+          width
+        }
       ]}>
       {icon ? (
         <View style={GlobalStyles.searchIcon}>
@@ -35,12 +41,15 @@ const InputText = ({
         </View>
       ) : null}
       <TextInput
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         style={GlobalStyles.searchInput}
         selectionColor={Colors.primary}
         autoCapitalize="none"
         placeholder={placeholder}
         placeholderTextColor={Colors.darkGray}
         value={value}
+        editable={!disabled}
         keyboardType={keyboardType}
         onChangeText={onChangeTextHandler}
       />

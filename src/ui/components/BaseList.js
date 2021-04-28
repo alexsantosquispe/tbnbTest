@@ -1,6 +1,9 @@
 import React from 'react'
 import { FlatList } from 'react-native'
 
+import EmptyList from './EmptyList'
+import Loading from './Loading'
+
 const BaseList = ({
   data,
   keyExtractor,
@@ -9,9 +12,14 @@ const BaseList = ({
   footerList = null,
   renderSeparator = null,
   horizontal = false,
-  numColumns = 1
+  numColumns = 1,
+  loading = false
 }) => {
-  return (
+  return loading ? (
+    <Loading message="Loading..." />
+  ) : data.length === 0 ? (
+    <EmptyList size={horizontal ? 'small' : 'default'} />
+  ) : (
     <FlatList
       style={{ minHeight: 100 }}
       data={data}

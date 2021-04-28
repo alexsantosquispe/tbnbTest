@@ -5,7 +5,13 @@ import { Colors, GlobalStyles } from '../styles'
 import CircleBadge from './CircleBadge'
 import CounterItem from './CounterItem'
 
-const ItemAttached = ({ data, onPressHandler, onRemove }) => {
+const ItemTemp = ({
+  data,
+  onPressHandler,
+  onIncrement,
+  onDecrement,
+  onRemove
+}) => {
   return data ? (
     <TouchableOpacity
       style={GlobalStyles.itemAttached}
@@ -34,11 +40,11 @@ const ItemAttached = ({ data, onPressHandler, onRemove }) => {
       </View>
       <CounterItem
         value={data.quantity}
-        onIncrement={() => {}}
-        onDecrement={() => {}}
+        onIncrement={onIncrement}
+        onDecrement={onDecrement}
       />
     </TouchableOpacity>
   ) : null
 }
 
-export default ItemAttached
+export default ItemTemp

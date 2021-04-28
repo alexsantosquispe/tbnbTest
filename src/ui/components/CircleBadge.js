@@ -5,16 +5,16 @@ import { Colors, GlobalStyles } from '../styles'
 
 const CircleBadge = ({
   label,
-  position = { right: 0, left: 0, top: 0, bottom: 0 },
-  color = Colors.secondary,
-  textColor = Colors.dark,
+  position = { right: 0, bottom: 0 },
+  color = Colors.primary,
+  textColor = Colors.ligth,
   icon,
   onPressHandler
 }) => {
   return label ? (
     <View
       style={[
-        GlobalStyles.circleBadgeText,
+        GlobalStyles.circleBadgeContainer,
         {
           backgroundColor: color,
           right: position.right,
@@ -23,7 +23,7 @@ const CircleBadge = ({
           bottom: position.bottom
         }
       ]}>
-      <Text style={{ fontWeight: 'bold', fontSize: 16, color: textColor }}>
+      <Text style={[GlobalStyles.circleBadgeText, { color: textColor }]}>
         {label}
       </Text>
     </View>

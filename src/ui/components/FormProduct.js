@@ -27,6 +27,7 @@ const FormProduct = ({ data, onClose, onSave }) => {
       <InputText
         value={nameProduct}
         placeholder="Product name"
+        disabled={true}
         onChangeTextHandler={(text) => {
           setNameProduct(text)
         }}

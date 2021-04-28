@@ -5,7 +5,8 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended', // uses react-specific linting rules
     'prettier/react', // disables react-specific linting rules that conflict with prettier
-    'plugin:prettier/recommended' // uses react-specific linting rules
+    'plugin:prettier/recommended', // uses react-specific linting rules
+    'react-hooks' // uses react hooks linting rules
   ],
   plugins: [
     'react',
@@ -18,7 +19,7 @@ module.exports = {
   },
   rules: {
     'react/display-name': 'off',
-    // this rules must be removed to complete prop-types validation
+    // TODO: this rules must be removed to complete prop-types validation
     'react/prop-types': 0,
     // import plugins
     'import/no-unresolved': 'error',
@@ -34,7 +35,9 @@ module.exports = {
           order: 'asc'
         }
       }
-    ]
+    ],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn'
   },
   env: {
     node: true

@@ -1,17 +1,19 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { Colors } from '../styles'
+import { Colors, GlobalStyles } from '../styles'
 
-const Badge = ({ label, color = Colors.warning }) => {
+const Badge = ({
+  label,
+  labelColor = Colors.dark,
+  color = Colors.cardBackground,
+  fontSize = 16
+}) => {
   return (
     <View
-      style={{
-        backgroundColor: color,
-        paddingHorizontal: 8,
-        paddingVertical: 2,
-        borderRadius: 6
-      }}>
-      <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{label}</Text>
+      style={[GlobalStyles.regularBadgeContainer, { backgroundColor: color }]}>
+      <Text style={{ fontWeight: 'bold', fontSize, color: labelColor }}>
+        {label}
+      </Text>
     </View>
   )
 }

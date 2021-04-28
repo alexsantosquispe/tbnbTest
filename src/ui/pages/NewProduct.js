@@ -1,42 +1,74 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState, useEffect } from 'react'
-import { View, Text, StatusBar, Alert } from 'react-native'
+import { View, StatusBar, Alert } from 'react-native'
+
 import changeNavigationBarColor from 'react-native-navigation-bar-color'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import uuid from 'react-native-uuid'
+
 import * as Api from '../../core/api/firebaseAPI'
-import { CATALOG } from '../../core/constants'
+import { CATALOG, PRODUCTS } from '../../core/constants'
 import {
-  BaseList,
+  CatalogList,
   CustomModal,
-  ItemCatalog,
-  ItemAttached,
   HeaderNav,
-  Separator
+  Loading,
+  ModalContainer,
+  Separator,
+  TempItemsList
 } from '../components'
 import { Colors, GlobalStyles } from '../styles'
+import { useInventoryContext } from '../../core/providers/InventoryProvider'
 
 changeNavigationBarColor(Colors.ligth, true)
 
 const NewProduct = () => {
   const navigation = useNavigation()
-  const [catalog, setCatalog] = useState([])
+  const { products } = useInventoryContext()
+  const [catalogs, setCatalogs] = useState([])
   const [tempItems, setTempItems] = useState([])
   const [itemSelected, setItemSelected] = useState({})
-  const [modalVisibility, setModalVisibility] = useState(false)
+  const [modalDetailVisibility, setModalDetailVisibility] = useState(false)
+  const [loadingModal, setLoadingModal] = useState(false)
 
   useEffect(() => {
     const docs = Api.fetchItems(CATALOG, (result) => {
-      setCatalog(result)
+      if (result.success) {
+        setCatalogs(result.data)
+      }
     })
-    return () => docs
-  }, [])
+    return () => docs()
+  }, [setCatalogs])
+
+  const saveProduct = async () => {
+    try {
+      setLoadingModal(true)
+      let response = null
+      if (products && products.length > 0) {
+        response = await Api.setArrayOfItems(PRODUCTS, products, tempItems)
+      } else {
+        response = await Api.addArrayOfItems(PRODUCTS, tempItems)
+      }
+      if (response.success) {
+        setLoadingModal(false)
+        navigation.goBack()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    setLoadingModal(false)
+  }
 
   const goBack = () => {
-    confirmationDialog()
+    if (tempItems.length > 0) {
+      confirmationDialog()
+    } else {
+      navigation.goBack()
+    }
   }
 
   const toggleModal = () => {
-    setModalVisibility(!modalVisibility)
+    setModalDetailVisibility(!modalDetailVisibility)
   }
 
   const confirmationDialog = () => {
@@ -54,46 +86,62 @@ const NewProduct = () => {
     )
   }
 
-  const keyExtractor = (item) => {
-    return item.uid.toString()
+  const attachNewItem = (item) => {
+    let tempItemsClone = [...tempItems]
+    const tempItemIndex = tempItems.findIndex(
+      (tempItem) => tempItem.name === item.name && tempItem.price === item.price
+    )
+
+    if (tempItemIndex !== -1) {
+      const auxItem = tempItemsClone[tempItemIndex]
+      tempItemsClone[tempItemIndex] = {
+        ...auxItem,
+        quantity: auxItem.quantity + 1
+      }
+      setTempItems(tempItemsClone)
+    } else {
+      setTempItems([
+        ...tempItemsClone,
+        {
+          ...item,
+          uid: uuid.v4(),
+          quantity: 1
+        }
+      ])
+    }
   }
 
-  const renderItemCatalog = ({ item }) => {
-    return (
-      <ItemCatalog
-        data={item}
-        onPressHandler={() => {
-          setTempItems((prev) => {
-            return [
-              ...prev,
-              {
-                ...item,
-                uid: Date.now(),
-                quantity: 1
-              }
-            ]
-          })
-        }}
-      />
-    )
+  const onSelectTempItem = (item) => {
+    setItemSelected(item)
+    setModalDetailVisibility(true)
   }
 
-  const renderItemTemp = ({ item }) => {
-    return (
-      <ItemAttached
-        data={item}
-        onPressHandler={() => {
-          setItemSelected(item)
-          setModalVisibility(true)
-        }}
-        onRemove={() => {
-          const filtered = tempItems.filter(
-            (itemValue) => itemValue.uid !== item.uid
-          )
-          setTempItems(filtered)
-        }}
-      />
+  const incrementQuantity = (item) => {
+    const updatedItem = { ...item, quantity: item.quantity + 1 }
+    const tempItemIndex = tempItems.findIndex(
+      (tempItem) => tempItem.uid === item.uid
     )
+    const tempItemsClone = [...tempItems]
+    tempItemsClone[tempItemIndex] = updatedItem
+    setTempItems(tempItemsClone)
+  }
+
+  const decrementQuantity = (item) => {
+    const updatedItem = {
+      ...item,
+      quantity: item.quantity > 1 ? item.quantity - 1 : item.quantity
+    }
+    const tempItemIndex = tempItems.findIndex(
+      (tempItem) => tempItem.uid === item.uid
+    )
+    const tempItemsClone = [...tempItems]
+    tempItemsClone[tempItemIndex] = updatedItem
+    setTempItems(tempItemsClone)
+  }
+
+  const onRemoveTempItem = (item) => {
+    const filtered = tempItems.filter((itemValue) => itemValue.uid !== item.uid)
+    setTempItems(filtered)
   }
 
   return (
@@ -104,7 +152,7 @@ const NewProduct = () => {
         icon="close"
         onPressHandler={goBack}
         iconRightButton="send"
-        actionRightButton={() => {}}
+        actionRightButton={saveProduct}
       />
       <View style={GlobalStyles.mainContainer}>
         <View
@@ -112,35 +160,24 @@ const NewProduct = () => {
             marginVertical: 12,
             justifyContent: 'center'
           }}>
-          <View>
-            <Text style={GlobalStyles.labelBlackSmall}>Catalog</Text>
-            <Text style={GlobalStyles.labelSubTitleSmall}>
-              Select an item to fill the form automatically
-            </Text>
-          </View>
-          <BaseList
-            data={catalog}
-            horizontal={true}
-            keyExtractor={keyExtractor}
-            renderItem={renderItemCatalog}
-          />
+          <CatalogList catalogs={catalogs} onPressItem={attachNewItem} />
           <Separator customStyles={GlobalStyles.biggerMarginSpace} />
-          <View>
-            <Text style={GlobalStyles.labelBlackSmall}>Items Selected</Text>
-          </View>
-          <BaseList
-            data={tempItems}
-            numColumns={2}
-            keyExtractor={keyExtractor}
-            renderItem={renderItemTemp}
-            footerList={() => <View style={GlobalStyles.listFooterEmpty} />}
+          <TempItemsList
+            tempItems={tempItems}
+            onPressItem={onSelectTempItem}
+            onIncrement={incrementQuantity}
+            onDecrement={decrementQuantity}
+            onRemove={onRemoveTempItem}
           />
         </View>
         <CustomModal
           data={itemSelected}
-          isVisible={modalVisibility}
+          isVisible={modalDetailVisibility}
           onCloseHandler={toggleModal}
         />
+        <ModalContainer isVisible={loadingModal}>
+          <Loading message="Processing..." />
+        </ModalContainer>
       </View>
     </SafeAreaView>
   )
