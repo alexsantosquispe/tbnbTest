@@ -8,6 +8,7 @@ import uuid from 'react-native-uuid'
 
 import * as Api from '../../core/api/firebaseAPI'
 import { CATALOG, PRODUCTS } from '../../core/constants'
+import { useInventoryContext } from '../../core/providers/InventoryProvider'
 import {
   CatalogList,
   CustomModal,
@@ -18,7 +19,6 @@ import {
   TempItemsList
 } from '../components'
 import { Colors, GlobalStyles } from '../styles'
-import { useInventoryContext } from '../../core/providers/InventoryProvider'
 
 changeNavigationBarColor(Colors.ligth, true)
 
@@ -145,14 +145,15 @@ const NewProduct = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={GlobalStyles.fullContainer}>
       <StatusBar backgroundColor={Colors.background} barStyle="dark-content" />
       <HeaderNav
         title="New Product"
         icon="close"
         onPressHandler={goBack}
-        iconRightButton="send"
+        textRigthButton="Save"
         actionRightButton={saveProduct}
+        disableRigthButton={tempItems.length === 0}
       />
       <View style={GlobalStyles.mainContainer}>
         <View
