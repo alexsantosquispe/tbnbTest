@@ -5,8 +5,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended', // uses react-specific linting rules
     'prettier/react', // disables react-specific linting rules that conflict with prettier
-    'plugin:prettier/recommended', // uses react-specific linting rules
-    'react-hooks' // uses react hooks linting rules
+    'plugin:prettier/recommended' // uses react-specific linting rules
   ],
   plugins: [
     'react',
@@ -35,9 +34,7 @@ module.exports = {
           order: 'asc'
         }
       }
-    ],
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn'
+    ]
   },
   env: {
     node: true

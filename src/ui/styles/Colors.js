@@ -9,9 +9,9 @@ export const Colors = {
   successLigth: '#C0F0EB',
   dangerLigth: '#FF8CA9',
   warningLigth: '#FFED9B',
-  dark: '#000000',
+  info: '#075ed9',
+  infoLigth: '#BFD8FD',
   transparentDark: '#00000093',
-  ligth: '#FFFFFF',
   textTitle: '#000000',
   textSubTitle: '#657786',
   inputBackground: '#F5F5F5',
@@ -22,9 +22,13 @@ export const Colors = {
   inactive: '#A7B5C0',
   disabled: '#237EE0',
   separator: '#999DB5',
+  ligth: '#FFFFFF',
+  dark: '#000000',
+  darkText: '#353535',
   gray: '#8B929B',
   darkGray: '#657786',
   ligthGray: '#A7B5C0',
   xligthGray: '#C6D2DA',
-  xxligthGray: '#DAE1E6'
+  xxligthGray: '#DAE1E6',
+  xxxligthGray: '#F5F5F5'
 }

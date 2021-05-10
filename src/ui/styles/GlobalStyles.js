@@ -17,6 +17,9 @@ export const GlobalStyles = StyleSheet.create({
   justifyContentCenter: {
     justifyContent: 'center'
   },
+  alignContentCenter: {
+    alignItems: 'center'
+  },
   horizontalEnd: {
     alignItems: 'flex-end'
   },
@@ -44,6 +47,10 @@ export const GlobalStyles = StyleSheet.create({
     fontWeight: 'bold',
     paddingTop: 12,
     paddingBottom: 16
+  },
+  titleItem: {
+    color: Colors.textTitle,
+    fontSize: 28
   },
   textSubTitle: {
     color: Colors.textTitle,
@@ -76,7 +83,7 @@ export const GlobalStyles = StyleSheet.create({
   buttonContainer: {
     backgroundColor: Colors.primary,
     borderRadius: 12,
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 12,
     marginVertical: 8,
     justifyContent: 'center',
@@ -215,7 +222,8 @@ export const GlobalStyles = StyleSheet.create({
   },
   labelBlack: {
     fontWeight: 'bold',
-    fontSize: 17
+    fontSize: 17,
+    color: Colors.dark
   },
   counterContainer: {
     flexDirection: 'row',
@@ -225,20 +233,20 @@ export const GlobalStyles = StyleSheet.create({
     alignItems: 'center'
   },
   counterValue: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     borderColor: Colors.ligthGray,
-    borderRightWidth: 1,
-    borderLeftWidth: 1,
+    borderRightWidth: 0,
+    borderLeftWidth: 0,
     paddingVertical: 8,
     justifyContent: 'center'
   },
   counterLeftButton: {
-    paddingRight: 12,
+    paddingRight: 8,
     paddingLeft: 16,
     paddingVertical: 8
   },
   counterRightButton: {
-    paddingLeft: 12,
+    paddingLeft: 8,
     paddingRight: 16,
     paddingVertical: 8
   },

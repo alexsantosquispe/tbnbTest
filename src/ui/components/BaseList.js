@@ -13,7 +13,8 @@ const BaseList = ({
   renderSeparator = null,
   horizontal = false,
   numColumns = 1,
-  loading = false
+  loading = false,
+  onRefreshHandler
 }) => {
   return loading ? (
     <Loading message="Loading..." />
@@ -32,6 +33,8 @@ const BaseList = ({
       ItemSeparatorComponent={renderSeparator}
       ListHeaderComponent={headerList}
       ListFooterComponent={footerList}
+      onRefresh={onRefreshHandler}
+      refreshing={loading}
     />
   )
 }

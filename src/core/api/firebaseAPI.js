@@ -41,16 +41,19 @@ export const fetchItems = (
     )
 }
 
-export const getItemById = async (collection, itemUid) => {
-  try {
-    const result = await firestore()
-      .collection(collection)
-      .where('uid', itemUid)
-      .get()
-    return { success: true, data: result }
-  } catch (error) {
-    return { success: false, error }
-  }
+export const getItemById = (collection, itemUid, callback) => {
+  return firestore()
+    .collection(collection)
+    .where('uid', '==', itemUid)
+    .onSnapshot(
+      (querySnapshot) => {
+        const result = querySnapshot.docs[0].data()
+        callback({ success: true, data: result })
+      },
+      (error) => {
+        callback({ success: true, error })
+      }
+    )
 }
 
 export const getDocumentReference = (collection, docId) => {

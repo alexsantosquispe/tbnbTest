@@ -14,6 +14,7 @@ import {
   Separator,
   BaseList
 } from '../components'
+import { PRODUCT_DETAIL } from '../navigation/RouteNames'
 import { NEW_PRODUCT } from '../navigation/RouteNames'
 import { GlobalStyles, Colors } from '../styles'
 
@@ -27,8 +28,7 @@ const Home = () => {
 
   useEffect(() => {
     setLoadingProducts(true)
-    console.log('FETCH PRODUCTS')
-    const docs = Api.fetchItems(
+    const unsubscribe = Api.fetchItems(
       PRODUCTS,
       (result) => {
         if (result.success) {
@@ -39,11 +39,30 @@ const Home = () => {
       ['modifiedAt', 'desc'],
       true
     )
-    return () => docs()
+    return () => {
+      unsubscribe()
+    }
   }, [setProducts, setLoadingProducts])
 
+  const onRefreshList = () => {
+    setLoadingProducts(true)
+    Api.fetchItems(
+      PRODUCTS,
+      (result) => {
+        if (result.success) {
+          setProducts(result.data)
+          setLoadingProducts(false)
+        }
+      },
+      ['modifiedAt', 'desc'],
+      true
+    )
+  }
+
   const openProducDetail = (productSelected) => {
-    console.log(productSelected)
+    navigation.navigate(PRODUCT_DETAIL, {
+      productId: productSelected.uid
+    })
   }
 
   const keyExtractor = (item) => {
@@ -68,9 +87,7 @@ const Home = () => {
     )
   }
 
-  const renderSeparator = () => {
-    return <Separator />
-  }
+  const renderSeparator = () => <Separator />
 
   const renderFooter = () => <View style={GlobalStyles.listFooterEmpty} />
 
@@ -93,6 +110,7 @@ const Home = () => {
           footerList={renderFooter}
           renderSeparator={renderSeparator}
           loading={loadingProducts}
+          onRefreshHandler={onRefreshList}
         />
         <FloatButton icon="add" onPressHandler={addNewProduct} />
       </View>
